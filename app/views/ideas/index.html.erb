@@ -1,0 +1,31 @@
+<div>
+	<a href="/">Logout</a>
+	<h3>Hi <%= current_user.name %></h3>
+	<div>
+		<form action="/ideas" method="post">
+			<input type="hidden" name="authenticity_token" value="<%= form_authenticity_token %>">
+			<textarea cols="30" rows="1" name="idea[idea]" placeholder="Post something witty here..."></textarea>
+			<input type="submit" value="Idea!">
+		</form>
+		<%= flash[:errors] %>
+	</div>
+
+	<div>
+		<% @ideas.each do |idea| %>
+			<p><a href="/users/<%= idea.user.id %>"> <%= idea.user.name %></a> said <%= idea.idea %></p>
+			<% if idea.users.include? current_user %>
+			<sup><a href="/likes/<%= idea.id %>" data-method="post"></a></sup>
+			<% else %>
+			<sup><p><a href="/like/<%= idea.id %>" data-method="post">Like</a> </p></sup>
+			<% end %>
+			<sup><p><a href="/ideas/<%= idea.id %>"> <%= idea.likes.count %> People</a> liked this</p></sup>
+			<% if current_user.id == idea.user.id %>
+			<sup><p><a href="">DELETE</a> </p></sup>
+			<% end %>
+		<% end %>
+	</div>
+	
+</div>
+
+
+
